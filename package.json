@@ -1,0 +1,13 @@
+{
+  "name": "alex-mov-test",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "light-server -c lightserver.json"
+  },
+  "dependencies": {
+    "light-server": "^2.6.2",
+    "rollup": "^2.26.11"
+  }
+}
