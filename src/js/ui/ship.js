@@ -20,6 +20,20 @@ export class Ship {
     return 3;
   }
 
+  get rotate() {
+    if(!this._rotate){
+      return this._rotate = 0;
+    }
+    return this._rotate;
+  }
+
+  set rotate(val) {
+    this._rotate = val;
+    this.animatedSprite.textures.forEach((texture) => {
+      texture.rotate = this._rotate;
+    });
+  }
+
   constructor(renderer, play) {
     this.sound = new Audio("../../assets/sound/wwiiiuuuu.mp3");
     this.state = 'stop';
@@ -68,9 +82,6 @@ export class Ship {
         return;
         break
     }
-    this.animatedSprite.textures.forEach((texture) => {
-      texture.rotate = this.rotate;
-    });
     const newX = this.animatedSprite.x + x;
     const newY = this.animatedSprite.y + y;
     const topCollision = newY - Ship.frameSize().height / 2 >= -this.renderer.height / 2;
@@ -101,9 +112,5 @@ export class Ship {
         break
     }
     this.sound.play();
-    this.animatedSprite.textures.forEach((texture) => {
-      texture.rotate = this.rotate;
-    });
-
   }
 }
