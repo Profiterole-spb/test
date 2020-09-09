@@ -3,10 +3,9 @@ import {Ship} from './ui/ship.js';
 import {Joystick} from './ui/joystick.js';
 
 
-var ctx; // контекст аудио
-var buf; // аудиобуфер
+let ctx;
+let buf;
 
-// инициализация звуковой системы
 function init() {
   console.log("in init");
   try {
@@ -18,13 +17,11 @@ function init() {
 }
 window.addEventListener('load',init,false);
 
-// загружаем и декодируем mp3-файл
 function loadFile() {
   var req = new XMLHttpRequest();
   req.open("GET","./assets/sound/wwiiiuuuu.mp3",true);
   req.responseType = "arraybuffer";
   req.onload = function() {
-    // декодируем загруженные данные
     ctx.decodeAudioData(req.response, function(buffer) {
       buf = buffer;
     });
@@ -32,14 +29,10 @@ function loadFile() {
   req.send();
 }
 
-// воспроизведение загруженного файла
 function play() {
-  // создаём исходный узел из буфера
   var src = ctx.createBufferSource();
   src.buffer = buf;
-  // подключаемся к выходному узлу (колонкам)
   src.connect(ctx.destination);
-  // сразу воспроизводим
   src.start(0)
 }
 
@@ -65,8 +58,6 @@ PIXI.loader
     Ship.getTextureSrc()
   ])
   .load(setup);
-
-
 
 function setup() {
   const background = new Background();
