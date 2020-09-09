@@ -12,13 +12,16 @@ const app = new PIXI.Application({
 });
 
 document.body.appendChild(app.view);
-app.renderer.backgroundColor = 0x77d7b4;
-app.renderer.view.style.position = 'absolute';
-app.renderer.view.style.left = '50%';
-app.renderer.view.style.top = '50%';
-app.renderer.view.style.transform = 'translate(-50%, -50%)';
-app.renderer.view.style.display = 'block';
+
 const renderer = app.renderer;
+
+renderer.backgroundColor = 0x77d7b4;
+renderer.view.style.position = 'absolute';
+renderer.view.style.left = '50%';
+renderer.view.style.top = '50%';
+renderer.view.style.transform = 'translate(-50%, -50%)';
+renderer.view.style.display = 'block';
+
 
 PIXI.loader
   .add([
@@ -84,5 +87,4 @@ function setup() {
         break
     }
   });
-
 }
