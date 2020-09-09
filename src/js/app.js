@@ -1,20 +1,6 @@
 import {Background} from './ui/background.js';
 import {Ship} from './ui/ship.js';
 import {Joystick} from './ui/joystick.js';
-import {Audio} from './audio/audio.js';
-
-let ctx;
-let buf;
-
-window.onload = function () {
-  console.log(`init sound`);
-  try {
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    Audio.loadFile(ctx, buf);
-  } catch (e) {
-  alert('you need webaudio support');
-  }
-}
 
 const app = new PIXI.Application({
   width: 640,
@@ -44,7 +30,7 @@ function setup() {
   const background = new Background();
   background.width = renderer.width;
   background.height = renderer.height;
-  const ship = new Ship(renderer, () => Audio.play(ctx, buf));
+  const ship = new Ship(renderer);
   ship.animatedSprite.position.set(0, 0);
   const joystick = new Joystick(
     renderer,

@@ -21,6 +21,7 @@ export class Ship {
   }
 
   constructor(renderer, play) {
+    this.sound = new Audio("../../assets/sound/wwiiiuuuu.mp3");
     this.state = 'stop';
     this.play = play;
     this.renderer = renderer;
@@ -99,7 +100,7 @@ export class Ship {
         return;
         break
     }
-    this.play();
+    this.sound.play();
     this.animatedSprite.textures.forEach((texture) => {
       texture.rotate = this.rotate;
     });
