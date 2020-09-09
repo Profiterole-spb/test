@@ -7,12 +7,12 @@
 
   class Background {
     static getTextureSrc() {
-      return './assets/textures/background.jpg'
+      return '/assets/textures/background.jpg'
     }
 
     constructor() {
       return new PIXI.Sprite(
-       PIXI.loader.resources[Background.getTextureSrc()].texture
+       PIXI.Loader.shared.resources[Background.getTextureSrc()].texture
       )
     }
   }
@@ -23,7 +23,7 @@
 
   class Ship {
     static getTextureSrc() {
-      return './assets/textures/saboteur.png';
+      return '/assets/textures/saboteur.png';
     }
 
     static frameSize() {
@@ -40,6 +40,7 @@
     }
 
     constructor(renderer, play) {
+      this.sound = new Audio("../../assets/sound/wwiiiuuuu.mp3");
       this.state = 'stop';
       this.play = play;
       this.renderer = renderer;
@@ -47,7 +48,7 @@
       this.getTextures();
       this.animatedSprite = new PIXI.AnimatedSprite(this.textures);
       this.animatedSprite.anchor.set(0.5);
-      this.animatedSprite.animationSpeed = 0.5;
+      this.animatedSprite.animationSpeed = 0.1;
       this.animatedSprite.play();
       this.animatedSprite.buttonMode = true;
       this.animatedSprite.interactive = true;
@@ -57,7 +58,7 @@
     getTextures() {
       this.textures = [];
       for (let i = 0; i < Ship.frames; i++){
-        const baseTexture = new PIXI.BaseTexture(PIXI.loader.resources[Ship.getTextureSrc()].data);
+        const baseTexture = new PIXI.BaseTexture(PIXI.Loader.shared.resources[Ship.getTextureSrc()].data);
         this.textures.push(new PIXI.Texture(baseTexture));
         this.textures[this.textures.length-1].frame = new PIXI.Rectangle(
           i * Ship.frameSize().width,
@@ -88,8 +89,6 @@
       this.animatedSprite.textures.forEach((texture) => {
         texture.rotate = this.rotate;
       });
-      console.log(`ship position: x ${this.animatedSprite.x} y ${this.animatedSprite.y}
-    renderer width: ${this.renderer.width}, height: ${this.renderer.height}`);
       const newX = this.animatedSprite.x + x;
       const newY = this.animatedSprite.y + y;
       const topCollision = newY - Ship.frameSize().height / 2 >= -this.renderer.height / 2;
@@ -118,7 +117,7 @@
         default:
           return;
       }
-      this.play();
+      this.sound.play();
       this.animatedSprite.textures.forEach((texture) => {
         texture.rotate = this.rotate;
       });
@@ -224,47 +223,6 @@
     }
   }
 
-  var ctx; // контекст аудио
-  var buf; // аудиобуфер
-
-  // инициализация звуковой системы
-  function init() {
-    console.log("in init");
-    try {
-      ctx = new (window.AudioContext || window.webkitAudioContext)();
-      loadFile();
-    } catch(e) {
-      alert('you need webaudio support');
-    }
-  }
-  window.addEventListener('load',init,false);
-
-  // загружаем и декодируем mp3-файл
-  function loadFile() {
-    var req = new XMLHttpRequest();
-    req.open("GET","./assets/sound/wwiiiuuuu.mp3",true);
-    req.responseType = "arraybuffer";
-    req.onload = function() {
-      // декодируем загруженные данные
-      ctx.decodeAudioData(req.response, function(buffer) {
-        buf = buffer;
-      });
-    };
-    req.send();
-  }
-
-  // воспроизведение загруженного файла
-  function play() {
-    // создаём исходный узел из буфера
-    var src = ctx.createBufferSource();
-    src.buffer = buf;
-    // подключаемся к выходному узлу (колонкам)
-    src.connect(ctx.destination);
-    // сразу воспроизводим
-    src.start(0);
-  }
-
-
   const app = new PIXI.Application({
     width: 640,
     height: 480,
@@ -272,28 +230,28 @@
   });
 
   document.body.appendChild(app.view);
-  app.renderer.backgroundColor = 0x77d7b4;
-  app.renderer.view.style.position = 'absolute';
-  app.renderer.view.style.left = '50%';
-  app.renderer.view.style.top = '50%';
-  app.renderer.view.style.transform = 'translate(-50%, -50%)';
-  app.renderer.view.style.display = 'block';
+
   const renderer = app.renderer;
 
-  PIXI.loader
+  renderer.backgroundColor = 0x77d7b4;
+  renderer.view.style.position = 'absolute';
+  renderer.view.style.left = '50%';
+  renderer.view.style.top = '50%';
+  renderer.view.style.transform = 'translate(-50%, -50%)';
+  renderer.view.style.display = 'block';
+
+  PIXI.Loader.shared
     .add([
       Background.getTextureSrc(),
       Ship.getTextureSrc()
     ])
     .load(setup);
 
-
-
   function setup() {
     const background = new Background();
     background.width = renderer.width;
     background.height = renderer.height;
-    const ship = new Ship(renderer, play);
+    const ship = new Ship(renderer);
     ship.animatedSprite.position.set(0, 0);
     const joystick = new Joystick(
       renderer,
@@ -345,7 +303,6 @@
           return;
       }
     });
-
   }
 
 }());
