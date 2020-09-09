@@ -9,7 +9,7 @@ export class Background {
 
   constructor() {
     return new PIXI.Sprite(
-     PIXI.loader.resources[Background.getTextureSrc()].texture
+     PIXI.Loader.shared.resources[Background.getTextureSrc()].texture
     )
   }
 }

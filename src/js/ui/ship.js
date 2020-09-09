@@ -21,6 +21,7 @@ export class Ship {
   }
 
   constructor(renderer, play) {
+    this.sound = new Audio("../../assets/sound/wwiiiuuuu.mp3");
     this.state = 'stop';
     this.play = play;
     this.renderer = renderer;
@@ -38,7 +39,7 @@ export class Ship {
   getTextures() {
     this.textures = [];
     for (let i = 0; i < Ship.frames; i++){
-      const baseTexture = new PIXI.BaseTexture(PIXI.loader.resources[Ship.getTextureSrc()].data);
+      const baseTexture = new PIXI.BaseTexture(PIXI.Loader.shared.resources[Ship.getTextureSrc()].data);
       this.textures.push(new PIXI.Texture(baseTexture));
       this.textures[this.textures.length-1].frame = new PIXI.Rectangle(
         i * Ship.frameSize().width,
@@ -70,8 +71,6 @@ export class Ship {
     this.animatedSprite.textures.forEach((texture) => {
       texture.rotate = this.rotate;
     });
-    console.log(`ship position: x ${this.animatedSprite.x} y ${this.animatedSprite.y}
-    renderer width: ${this.renderer.width}, height: ${this.renderer.height}`);
     const newX = this.animatedSprite.x + x;
     const newY = this.animatedSprite.y + y;
     const topCollision = newY - Ship.frameSize().height / 2 >= -this.renderer.height / 2;
@@ -101,7 +100,7 @@ export class Ship {
         return;
         break
     }
-    this.play();
+    this.sound.play();
     this.animatedSprite.textures.forEach((texture) => {
       texture.rotate = this.rotate;
     });
