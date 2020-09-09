@@ -28,7 +28,7 @@ export class Ship {
     this.getTextures();
     this.animatedSprite = new PIXI.AnimatedSprite(this.textures);
     this.animatedSprite.anchor.set(0.5);
-    this.animatedSprite.animationSpeed = 0.5;
+    this.animatedSprite.animationSpeed = 0.1;
     this.animatedSprite.play();
     this.animatedSprite.buttonMode = true;
     this.animatedSprite.interactive = true;
