@@ -1,41 +1,9 @@
 import {Background} from './ui/background.js';
 import {Ship} from './ui/ship.js';
 import {Joystick} from './ui/joystick.js';
+import {Audio} from './audio/audio.js';
 
-
-let ctx;
-let buf;
-
-function init() {
-  console.log("in init");
-  try {
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    loadFile();
-  } catch(e) {
-    alert('you need webaudio support');
-  }
-}
-window.addEventListener('load',init,false);
-
-function loadFile() {
-  var req = new XMLHttpRequest();
-  req.open("GET","./assets/sound/wwiiiuuuu.mp3",true);
-  req.responseType = "arraybuffer";
-  req.onload = function() {
-    ctx.decodeAudioData(req.response, function(buffer) {
-      buf = buffer;
-    });
-  };
-  req.send();
-}
-
-function play() {
-  var src = ctx.createBufferSource();
-  src.buffer = buf;
-  src.connect(ctx.destination);
-  src.start(0)
-}
-
+const sound = new Audio();
 
 const app = new PIXI.Application({
   width: 640,
@@ -63,7 +31,7 @@ function setup() {
   const background = new Background();
   background.width = renderer.width;
   background.height = renderer.height;
-  const ship = new Ship(renderer, play);
+  const ship = new Ship(renderer, sound.play);
   ship.animatedSprite.position.set(0, 0);
   const joystick = new Joystick(
     renderer,
