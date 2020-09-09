@@ -7,7 +7,7 @@
 
   class Background {
     static getTextureSrc() {
-      return '/assets/textures/background.jpg'
+      return './assets/textures/background.jpg'
     }
 
     constructor() {
@@ -23,7 +23,7 @@
 
   class Ship {
     static getTextureSrc() {
-      return '/assets/textures/saboteur.png';
+      return './assets/textures/saboteur.png';
     }
 
     static frameSize() {
@@ -39,8 +39,24 @@
       return 3;
     }
 
+    get rotate() {
+      if(!this._rotate){
+        return this._rotate = 0;
+      }
+      return this._rotate;
+    }
+
+    set rotate(val) {
+      this._rotate = val;
+      if(this.animatedSprite) {
+        this.animatedSprite.textures.forEach((texture) => {
+          texture.rotate = this._rotate;
+        });
+      }
+    }
+
     constructor(renderer, play) {
-      this.sound = new Audio("../../assets/sound/wwiiiuuuu.mp3");
+      this.sound = new Audio("assets/sound/wwiiiuuuu.mp3");
       this.state = 'stop';
       this.play = play;
       this.renderer = renderer;
@@ -86,9 +102,6 @@
         default:
           return;
       }
-      this.animatedSprite.textures.forEach((texture) => {
-        texture.rotate = this.rotate;
-      });
       const newX = this.animatedSprite.x + x;
       const newY = this.animatedSprite.y + y;
       const topCollision = newY - Ship.frameSize().height / 2 >= -this.renderer.height / 2;
@@ -118,10 +131,6 @@
           return;
       }
       this.sound.play();
-      this.animatedSprite.textures.forEach((texture) => {
-        texture.rotate = this.rotate;
-      });
-
     }
   }
 

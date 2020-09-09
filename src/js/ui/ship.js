@@ -29,9 +29,11 @@ export class Ship {
 
   set rotate(val) {
     this._rotate = val;
-    this.animatedSprite.textures.forEach((texture) => {
-      texture.rotate = this._rotate;
-    });
+    if(this.animatedSprite) {
+      this.animatedSprite.textures.forEach((texture) => {
+        texture.rotate = this._rotate;
+      });
+    }
   }
 
   constructor(renderer, play) {
